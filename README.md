@@ -2,9 +2,9 @@
 
 Backend for an interactive teaching platform. Teachers create multimedia content with highlighted articles and popup explanations. Students consume published content through a role-enforced API.
 
-- **Live API:** `[deployed URL]`
-- **Interactive docs:** `[deployed URL]/docs`
-- **GitHub:** `[repo URL]`
+- **Live API:** `https://azad-edu.onrender.com`
+- **Interactive docs:** `https://azad-edu.onrender.com/docs`
+- **GitHub:** `https://github.com/siamsadmanazad/azad.edu`
 
 ---
 
@@ -94,6 +94,32 @@ alembic revision --autogenerate -m "describe your change"
 ```
 
 The database is seeded with `teacher` and `student` roles automatically on first startup.
+
+---
+
+## Testing the API
+
+There is no frontend for this project. Use one of the following to test the full setup:
+
+### Swagger UI (recommended)
+
+Visit `https://azad-edu.onrender.com/docs` (or `http://localhost:8000/docs` locally).
+
+Core flow to verify everything works:
+1. `POST /api/v1/auth/register` — create a teacher account (set `role` to `teacher`)
+2. `POST /api/v1/auth/login` — get a JWT token
+3. Click **Authorize** (top right) and paste the token as `Bearer <token>`
+4. `POST /api/v1/content` — create a content unit
+5. `POST /api/v1/articles` — add an article to that content
+6. `POST /api/v1/content/{id}/publish` — publish it
+7. `GET /api/v1/content/{id}/view` — full page render with all nested data
+
+### REST Client
+
+Import the API into **Postman** or **Bruno** using the OpenAPI spec at:
+```
+https://azad-edu.onrender.com/openapi.json
+```
 
 ---
 
@@ -201,22 +227,22 @@ Media files are uploaded directly to Cloudflare R2 — they never pass through t
 
 ---
 
-## Deployment (Render + Neon)
+## Deployment (Render)
 
-### 1. Set up Neon database
+### 1. Create a Render Postgres database
 
-- Create a project at [neon.tech](https://neon.tech)
-- Copy the connection string
+- Go to Render dashboard → **+ New → PostgreSQL**
+- Set region to **Singapore (Southeast Asia)**
+- Copy the **Internal Database URL** from the Connections section
 
-### 2. Deploy to Render
+### 2. Deploy the web service
 
 - Connect your GitHub repo to Render
-- Set environment: **Python**
+- Language: **Python 3**
 - Build command: `pip install -r requirements.txt`
-- Start command:
-  ```
-  alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
-  ```
+- Pre-deploy command: `alembic upgrade head`
+- Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- Health check path: `/health`
 
 ### 3. Set environment variables in Render dashboard
 
@@ -224,14 +250,14 @@ All variables from `.env.example` must be set. Key production values:
 
 ```
 SECRET_KEY=<strong random string, min 32 chars>
-DATABASE_URL=<neon connection string>
+DATABASE_URL=<render postgres internal database URL>
 ALLOWED_ORIGINS=["https://your-frontend.com"]
 DEBUG=False
 ```
 
 ### 4. Health check
 
-Render will ping `GET /health` to confirm the service is up. Returns:
+Render pings `GET /health` to confirm the service is up. Returns:
 
 ```json
 { "status": "ok", "app": "Azad.Edu", "db": "connected" }
