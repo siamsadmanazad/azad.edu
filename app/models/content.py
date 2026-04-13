@@ -15,7 +15,12 @@ class Content(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String(500), nullable=False)
     description = Column(Text, nullable=True)
-    status = Column(SAEnum(ContentStatus), default=ContentStatus.DRAFT, nullable=False, index=True)
+    status = Column(
+        SAEnum(ContentStatus, values_callable=lambda x: [e.value for e in x]),
+        default=ContentStatus.DRAFT,
+        nullable=False,
+        index=True,
+    )
     teacher_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     deleted_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
