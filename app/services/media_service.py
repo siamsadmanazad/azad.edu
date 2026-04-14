@@ -29,6 +29,11 @@ def generate_presigned_url(
     uploader_id: UUID,
     db: Session,
 ) -> PresignedURLResponse:
+    if not settings.CLOUDFLARE_R2_ENDPOINT_URL or not settings.CLOUDFLARE_R2_BUCKET_NAME:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File storage (R2) is not configured on this server.",
+        )
     if not validate_mime_type(request.mime_type, request.media_type):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

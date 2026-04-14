@@ -35,6 +35,7 @@ alembic/versions/*.pyc
 
 # Media / uploads
 media/
+!frontend/components/media/
 
 # Logs
 *.log
