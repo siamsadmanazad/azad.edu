@@ -1,7 +1,8 @@
-# Azad.Edu — Backend API
+# Azad.Edu — Interactive Teaching Platform
 
-Backend for an interactive teaching platform. Teachers create multimedia content with highlighted articles and popup explanations. Students consume published content through a role-enforced API.
+An interactive teaching platform where teachers create multimedia content with highlighted articles and popup explanations. Students consume published content through a role-enforced interface.
 
+- **Live App:** [https://frontend-fowma7kf2-siam-azads-projects.vercel.app/login](https://frontend-fowma7kf2-siam-azads-projects.vercel.app/login)
 - **Live API:** `https://azad-edu.onrender.com`
 - **Interactive docs:** `https://azad-edu.onrender.com/docs`
 - **GitHub:** `https://github.com/siamsadmanazad/azad.edu`
@@ -99,7 +100,7 @@ The database is seeded with `teacher` and `student` roles automatically on first
 
 ## Testing the API
 
-There is no frontend for this project. Use one of the following to test the full setup:
+The frontend is live at [https://frontend-fowma7kf2-siam-azads-projects.vercel.app/login](https://frontend-fowma7kf2-siam-azads-projects.vercel.app/login). You can also test the API directly:
 
 ### Swagger UI (recommended)
 
