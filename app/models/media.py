@@ -17,7 +17,7 @@ class Media(Base):
     url = Column(String(1000), nullable=False)
     mime_type = Column(String(100), nullable=True)
     size_bytes = Column(Integer, nullable=True)
-    media_type = Column(SAEnum(MediaType), nullable=False)
+    media_type = Column(SAEnum(MediaType, values_callable=lambda x: [e.value for e in x]), nullable=False)
     youtube_url = Column(String(1000), nullable=True)
     uploader_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
